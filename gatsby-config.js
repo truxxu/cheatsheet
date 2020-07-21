@@ -19,5 +19,6 @@ module.exports = {
       ignoreIndex: true
     }
   },
+  pathPrefix: '/cheatsheet',
   plugins: [{ resolve: `gatsby-theme-document` }]
 };
