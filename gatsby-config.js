@@ -1,21 +1,21 @@
 module.exports = {
   siteMetadata: {
-    title: `Document by Code Bushi`,
-    name: `Code Bushi`,
+    title: `Cheatsheet by Truxxu`,
+    name: `Cheatsheet`,
     siteUrl: `https://gatsby-theme-document.netlify.com`,
-    description: `This is my description that will be used in the meta tags and important for search results`,
+    description: `My go-to place to find all those useful tips and tricks needed when seting up a new machine`,
     social: [
       {
         name: `github`,
-        url: `https://github.com/codebushi/gatsby-theme-document`
+        url: `https://github.com/truxxu/cheatsheet`
       },
-      {
-        name: `twitter`,
-        url: `https://twitter.com/HuntaroSan`
-      }
+      // {
+      //   name: `twitter`,
+      //   url: `https://twitter.com/HuntaroSan`
+      // }
     ],
     sidebarConfig: {
-      forcedNavOrder: ["/introduction", "/codeblock"],
+      forcedNavOrder: ["/introduction", "/dev"],
       ignoreIndex: true
     }
   },
