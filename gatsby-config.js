@@ -9,10 +9,6 @@ module.exports = {
         name: `github`,
         url: `https://github.com/truxxu/cheatsheet`
       },
-      // {
-      //   name: `twitter`,
-      //   url: `https://twitter.com/HuntaroSan`
-      // }
     ],
     sidebarConfig: {
       forcedNavOrder: ["/introduction", "/dev"],
