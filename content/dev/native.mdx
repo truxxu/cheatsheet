@@ -1,0 +1,112 @@
+---
+title: "React Native"
+description: "RN Setup"
+---
+
+## Android Studio (Aug. 2020)
+```
+sudo snap install android-studio --classic
+```
+
+Once installed, navigate to Android SDK and make sure the following components are installed:
+
+Android 10 (Q)
+- Android SDK Platform 29
+- Sources for Android 29
+- Android SDK Build-Tools 29.0.2
+- Android Emulator
+- Android SDK Platform-Tools
+- Google Play Intel x86 Atom_64 System Image (android-29)
+
+Add to .zshrc
+```shell
+export ANDROID_HOME=$HOME/Android/Sdk
+export PATH=$PATH:$ANDROID_HOME/emulator
+export PATH=$PATH:$ANDROID_HOME/tools
+export PATH=$PATH:$ANDROID_HOME/tools/bin
+export PATH=$PATH:$ANDROID_HOME/platform-tools
+```
+
+Restart the terminal and verify installation
+```
+echo $ANDROID_HOME
+echo $PATH
+```
+## Watchman
+
+RN docs recommend installing from source
+```
+sudo apt install libssl-dev autoconf automake libtool
+git clone https://github.com/facebook/watchman.git -b v4.9.0 --depth 1
+cd watchman 
+./autogen.sh
+./configure --without-python --without-pcre --enable-lenient
+make
+sudo make install
+```
+
+## KVM
+
+Check if your cpu supports virtualization
+```
+sudo apt-get install cpu-checker
+kvm-ok
+```
+Check if your cpu supports the required set of instructions
+```
+egrep -c '(vmx|svm)' /proc/cpuinfo
+```
+where the returned value must be greater than 0
+
+Enable virtualization in bios
+```
+sudo apt-get install qemu-kvm libvirt-daemon-system libvirt-clients bridge-utils
+sudo adduser `id -un` libvirt
+sudo adduser `id -un` kvm
+```
+
+Verify installation
+```
+virsh list --all
+```
+
+## Emulator
+
+Check AVD/physical device is present
+```
+adb devices
+```
+
+List available emulators
+```
+emulator -list-avds
+```
+
+## Debugger
+
+Standalone app for debugging RN apps
+```
+https://github.com/jhen0409/react-native-debugger/releases/download/v0.11.4/react-native-debugger_0.11.4_amd64.deb
+```
+
+## Start a new project
+```
+npx react-native init AwesomeProject
+```
+
+## Run your RN application
+
+Open emulator
+```
+emulator @emulator_name
+```
+
+Start Metro server
+```
+npx react-native start
+```
+
+Start application
+```
+npx react-native run-android
+```

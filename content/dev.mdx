@@ -8,12 +8,12 @@ web development. We will dedicate their own section to certain tools.
 
 These are some essential libraries/tools for web development:
 
-- Git
+## Git
 
 ```
 sudo apt install -y git
 ```
-- Create ssh key
+## Create ssh key
 ```
 mkdir -p ~/.ssh && ssh-keygen -t ed25519 -o -a 100 -f ~/.ssh/id_ed25519 -C "TYPE_YOUR_EMAIL@HERE.com"
 # Retrieve key
@@ -23,8 +23,8 @@ ssh -T git@github.com
 # In case of error
 ssh-add ~/.ssh/id_ed25519
 ```
-- Postgresql
+## Postgresql
 ```
 sudo apt install -y postgresql postgresql-contrib libpq-dev build-essential
-sudo -u postgres psql --command "CREATE ROLE `whoami` LOGIN createdb;
+sudo -u postgres psql --command "CREATE ROLE `whoami` LOGIN createdb;"
 ```
