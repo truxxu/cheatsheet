@@ -110,3 +110,92 @@ Start application
 ```
 npx react-native run-android
 ```
+
+## Generate APK file
+
+Create signing key
+
+```
+keytool -genkey -v -keystore your_key_name.keystore -alias your_key_alias -keyalg RSA -keysize 2048 -validity 10000
+```
+
+Move key into android folder
+
+```
+mv ./mykey.keystore ./android/app
+```
+
+Add variables to ~/.gradle/gradle.properties
+
+```
+MYAPP_UPLOAD_STORE_FILE=my-upload-key.keystore
+MYAPP_UPLOAD_KEY_ALIAS=my-key-alias
+MYAPP_UPLOAD_STORE_PASSWORD=*****
+MYAPP_UPLOAD_KEY_PASSWORD=*****
+```
+
+Add signing config for release to android/app/build.gradle
+
+```
+release {
+    if (project.hasProperty('MYAPP_UPLOAD_STORE_FILE')) {
+        storeFile file(MYAPP_UPLOAD_STORE_FILE)
+        storePassword MYAPP_UPLOAD_STORE_PASSWORD
+        keyAlias MYAPP_UPLOAD_KEY_ALIAS
+        keyPassword MYAPP_UPLOAD_KEY_PASSWORD
+    }
+}
+```
+
+Create folder android/app/src/main/assets
+
+Run command
+
+```
+npx react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res/
+```
+
+Navigate to folder
+
+```
+cd android
+```
+
+Run command to generate AAB
+
+```
+./gradlew bundleRelease
+```
+
+Run command to generate APK
+
+```
+./gradlew assembleRelease
+```
+
+In case of build errors
+
+```
+cd ..
+
+rm -rf android/app/src/main/res/drawable-*
+
+npx react-native bundle --platform android --dev false \
+  --entry-file index.js \
+  --bundle-output android/app/src/main/assets/index.android.bundle \
+  --assets-dest android/app/build/intermediates/res/merged/release/
+
+cd android && ./gradlew assembleRelease
+```
+
+Run to test a release version through adb
+
+```
+npx react-native run-android --variant=release
+```
+
+Find APK file
+
+```
+~/my-app/android/app/build/outputs/apk/release
+```
