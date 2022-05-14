@@ -1,0 +1,57 @@
+---
+title: "Youtube"
+description: "Ripping video and audio from streaming sites"
+---
+## youtube-dl
+
+Hasn't received updates for a while. Some things don't work anymore. Project abandoned?
+
+Install
+
+```
+sudo curl -L https://yt-dl.org/downloads/latest/youtube-dl -o /usr/local/bin/youtube-dl
+
+sudo chmod a+rx /usr/local/bin/youtube-dl
+```
+
+Update
+```
+youtube-dl -U
+```
+
+## yt-dlp
+
+Fork of youtube-dl. Works pretty much the same
+
+Install
+
+```
+sudo curl -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -o /usr/local/bin/yt-dlp
+
+sudo chmod a+rx /usr/local/bin/yt-dlp
+```
+
+Update
+```
+yt-dlp -U
+```
+
+## Batch Files
+
+```
+youtube-dl --batch-file="./links.txt"
+```
+
+## Download and convert to mp3
+
+For playlists
+
+```
+youtube-dl --ignore-errors --format bestaudio --extract-audio --audio-format mp3 --audio-quality 160K --output "%(title)s.%(ext)s" --yes-playlist 'https://www.youtube.com/list=PLdYwhvDpx0FI2cmiSVn5cMufHjYHpo_88'
+```
+
+For Batch Files
+
+```
+youtube-dl --ignore-errors --format bestaudio --extract-audio --audio-format mp3 --audio-quality 160K --output "%(title)s.%(ext)s" --batch-file="/path/to/playlist.txt"
+```
