@@ -111,7 +111,16 @@ Start application
 npx react-native run-android
 ```
 
-## Generate APK file
+## Test Release Variant
+
+Run to test a release version through adb
+
+```
+npx react-native run-android --variant=release
+```
+
+## Sign Release
+
 
 Create signing key
 
@@ -137,13 +146,26 @@ MYAPP_UPLOAD_KEY_PASSWORD=*****
 Add signing config for release to android/app/build.gradle
 
 ```
-release {
-    if (project.hasProperty('MYAPP_UPLOAD_STORE_FILE')) {
-        storeFile file(MYAPP_UPLOAD_STORE_FILE)
-        storePassword MYAPP_UPLOAD_STORE_PASSWORD
-        keyAlias MYAPP_UPLOAD_KEY_ALIAS
-        keyPassword MYAPP_UPLOAD_KEY_PASSWORD
-    }
+signingConfigs{
+  ...
+  release {
+      if (project.hasProperty('MYAPP_UPLOAD_STORE_FILE')) {
+          storeFile file(MYAPP_UPLOAD_STORE_FILE)
+          storePassword MYAPP_UPLOAD_STORE_PASSWORD
+          keyAlias MYAPP_UPLOAD_KEY_ALIAS
+          keyPassword MYAPP_UPLOAD_KEY_PASSWORD
+      }
+  }
+}
+```
+
+```
+buildTypes {
+  ...
+  release {
+    signingConfig signingConfigs.release
+    ...
+  }
 }
 ```
 
@@ -155,29 +177,11 @@ Run command
 npx react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res/
 ```
 
-Navigate to folder
-
-```
-cd android
-```
-
-Run command to generate AAB
-
-```
-./gradlew bundleRelease
-```
+## Generate APK
 
 Run command to generate APK
 
 ```
-./gradlew assembleRelease
-```
-
-In case of build errors
-
-```
-cd ..
-
 rm -rf android/app/src/main/res/drawable-*
 
 npx react-native bundle --platform android --dev false \
@@ -188,14 +192,37 @@ npx react-native bundle --platform android --dev false \
 cd android && ./gradlew assembleRelease
 ```
 
-Run to test a release version through adb
-
-```
-npx react-native run-android --variant=release
-```
-
 Find APK file
 
 ```
 ~/my-app/android/app/build/outputs/apk/release
+```
+
+## Generate AAB
+
+Run command to generate AAB
+
+```
+cd android
+./gradlew bundleRelease
+```
+
+Find AAB file
+
+```
+~/my-app/android/app/build/outputs/bundle/release/app-release.aab
+```
+
+## Reload .env variables
+
+```
+npx react-native start --reset-cache
+```
+
+## Show Async Storage Values
+
+Using the RN Debugger it is possible to see what is stored in Async Storage
+
+```
+showAsyncStorageContentInDev()
 ```
