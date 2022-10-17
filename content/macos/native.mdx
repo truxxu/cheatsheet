@@ -1,0 +1,70 @@
+---
+title: "React Native"
+description: "RN setup on macos"
+---
+
+## Watchman
+
+```
+brew install watchman
+
+```
+
+## Ruby
+
+```
+#remove previous versions of ruby
+rvm implode && sudo rm -rf ~/.rvm
+sudo rm -rf $HOME/.rbenv /usr/local/rbenv /opt/rbenv /usr/local/opt/rbenv
+brew uninstall --force rbenv ruby-build
+exec zsh
+# install ruby version manager
+brew install rbenv ruby-build
+# load into shell
+rbenv init
+# restart terminal
+exec zsh
+# install ruby 2.7.6 (Oct 2022)
+rbenv install 2.7.6
+# set global ruby version
+rbenv global 2.7.6
+# check version
+ruby --version
+# install bundler gem
+gem install bundler
+# configure shell to load rbenv
+# edit ~/.zshrc to add
+echo 'eval "$(~/.rbenv/bin/rbenv init - zsh)"' >> ~/.zshrc
+```
+
+## CLI Tools
+
+Open Xcode, then choose "Preferences..." from the Xcode menu. Go to the Locations panel and install the tools by selecting the most recent version in the Command Line Tools dropdown.
+
+## iOS Simulator
+
+Open Xcode > Preferences... and select the Components tab. Select a simulator with the corresponding version of iOS you wish to use.
+
+## CocoaPods (in case of errors)
+
+```
+sudo arch -x86_64 gem install ffi
+arch -x86_64 pod install
+```
+
+## Start new project
+
+```
+npx react-native init AwesomeProject
+# in case of errors:
+cd ios
+bundle install
+bundle exec pod install
+```
+
+## Running an app
+
+```
+npx react-native start
+npx react-native run-ios
+```

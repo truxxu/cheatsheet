@@ -1,0 +1,141 @@
+---
+title: "React Native"
+description: "Using RN to produce mobile apps"
+---
+
+## Test Release Variant
+
+Run to test a release version through adb
+
+```
+npx react-native run-android --variant=release
+```
+
+## Sign Release
+
+Create signing key
+
+```
+keytool -genkey -v -keystore your_key_name.keystore -alias your_key_alias -keyalg RSA -keysize 2048 -validity 10000
+```
+
+Move key into android folder
+
+```
+mv ./mykey.keystore ./android/app
+```
+
+Add variables to ~/.gradle/gradle.properties
+
+```
+MYAPP_UPLOAD_STORE_FILE=my-upload-key.keystore
+MYAPP_UPLOAD_KEY_ALIAS=my-key-alias
+MYAPP_UPLOAD_STORE_PASSWORD=*****
+MYAPP_UPLOAD_KEY_PASSWORD=*****
+```
+
+Add signing config for release to android/app/build.gradle
+
+```
+signingConfigs{
+  ...
+  release {
+      if (project.hasProperty('MYAPP_UPLOAD_STORE_FILE')) {
+          storeFile file(MYAPP_UPLOAD_STORE_FILE)
+          storePassword MYAPP_UPLOAD_STORE_PASSWORD
+          keyAlias MYAPP_UPLOAD_KEY_ALIAS
+          keyPassword MYAPP_UPLOAD_KEY_PASSWORD
+      }
+  }
+}
+```
+
+```
+buildTypes {
+  ...
+  release {
+    signingConfig signingConfigs.release
+    ...
+  }
+}
+```
+
+Create folder android/app/src/main/assets
+
+Run command
+
+```
+npx react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res/
+```
+
+## Generate APK
+
+Run command to generate APK
+
+```
+rm -rf android/app/src/main/res/drawable-*
+
+npx react-native bundle --platform android --dev false \
+  --entry-file index.js \
+  --bundle-output android/app/src/main/assets/index.android.bundle \
+  --assets-dest android/app/build/intermediates/res/merged/release/
+
+cd android && ./gradlew assembleRelease
+```
+
+Find APK file
+
+```
+~/my-app/android/app/build/outputs/apk/release
+```
+
+## Generate AAB
+
+Run command to generate AAB
+
+```
+cd android
+./gradlew bundleRelease
+```
+
+Find AAB file
+
+```
+~/my-app/android/app/build/outputs/bundle/release/app-release.aab
+```
+
+## Reload .env variables
+
+```
+npx react-native start --reset-cache
+```
+
+## Show Async Storage Values
+
+Using the RN Debugger it is possible to see what is stored in Async Storage
+
+```
+showAsyncStorageContentInDev()
+```
+
+## Add custom fonts
+
+1. Add ttf files to /assets/fonts/
+
+2. Create file react-native.config.js and add the following config:
+
+```
+module.exports = {
+  project: {
+    ios: {},
+    android: {},
+  },
+  assets: ['./assets/fonts/'],
+};
+```
+
+3. Run command
+
+```
+npx react-native link
+```

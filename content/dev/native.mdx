@@ -4,6 +4,7 @@ description: "RN Setup"
 ---
 
 ## Android Studio (Aug. 2020)
+
 ```
 sudo snap install android-studio --classic
 ```
@@ -11,6 +12,7 @@ sudo snap install android-studio --classic
 Once installed, navigate to Android SDK and make sure the following components are installed:
 
 Android 10 (Q)
+
 - Android SDK Platform 29
 - Sources for Android 29
 - Android SDK Build-Tools 29.0.2
@@ -19,6 +21,7 @@ Android 10 (Q)
 - Google Play Intel x86 Atom_64 System Image (android-29)
 
 Add to .zshrc
+
 ```shell
 export ANDROID_HOME=$HOME/Android/Sdk
 export PATH=$PATH:$ANDROID_HOME/emulator
@@ -28,17 +31,20 @@ export PATH=$PATH:$ANDROID_HOME/platform-tools
 ```
 
 Restart the terminal and verify installation
+
 ```
 echo $ANDROID_HOME
 echo $PATH
 ```
+
 ## Watchman
 
 RN docs recommend installing from source
+
 ```
 sudo apt install libssl-dev autoconf automake libtool
 git clone https://github.com/facebook/watchman.git -b v4.9.0 --depth 1
-cd watchman 
+cd watchman
 ./autogen.sh
 ./configure --without-python --without-pcre --enable-lenient
 make
@@ -48,17 +54,22 @@ sudo make install
 ## KVM
 
 Check if your cpu supports virtualization
+
 ```
 sudo apt-get install cpu-checker
 kvm-ok
 ```
+
 Check if your cpu supports the required set of instructions
+
 ```
 egrep -c '(vmx|svm)' /proc/cpuinfo
 ```
+
 where the returned value must be greater than 0
 
 Enable virtualization in bios
+
 ```
 sudo apt-get install qemu-kvm libvirt-daemon-system libvirt-clients bridge-utils
 sudo adduser `id -un` libvirt
@@ -66,6 +77,7 @@ sudo adduser `id -un` kvm
 ```
 
 Verify installation
+
 ```
 virsh list --all
 ```
@@ -73,11 +85,13 @@ virsh list --all
 ## Emulator
 
 Check AVD/physical device is present
+
 ```
 adb devices
 ```
 
 List available emulators
+
 ```
 emulator -list-avds
 ```
@@ -85,11 +99,13 @@ emulator -list-avds
 ## Debugger
 
 Standalone app for debugging RN apps
+
 ```
 https://github.com/jhen0409/react-native-debugger/releases/download/v0.11.4/react-native-debugger_0.11.4_amd64.deb
 ```
 
 ## Start a new project
+
 ```
 npx react-native init AwesomeProject
 ```
@@ -97,132 +113,19 @@ npx react-native init AwesomeProject
 ## Run your RN application
 
 Open emulator
+
 ```
 emulator @emulator_name
 ```
 
 Start Metro server
+
 ```
 npx react-native start
 ```
 
 Start application
+
 ```
 npx react-native run-android
-```
-
-## Test Release Variant
-
-Run to test a release version through adb
-
-```
-npx react-native run-android --variant=release
-```
-
-## Sign Release
-
-
-Create signing key
-
-```
-keytool -genkey -v -keystore your_key_name.keystore -alias your_key_alias -keyalg RSA -keysize 2048 -validity 10000
-```
-
-Move key into android folder
-
-```
-mv ./mykey.keystore ./android/app
-```
-
-Add variables to ~/.gradle/gradle.properties
-
-```
-MYAPP_UPLOAD_STORE_FILE=my-upload-key.keystore
-MYAPP_UPLOAD_KEY_ALIAS=my-key-alias
-MYAPP_UPLOAD_STORE_PASSWORD=*****
-MYAPP_UPLOAD_KEY_PASSWORD=*****
-```
-
-Add signing config for release to android/app/build.gradle
-
-```
-signingConfigs{
-  ...
-  release {
-      if (project.hasProperty('MYAPP_UPLOAD_STORE_FILE')) {
-          storeFile file(MYAPP_UPLOAD_STORE_FILE)
-          storePassword MYAPP_UPLOAD_STORE_PASSWORD
-          keyAlias MYAPP_UPLOAD_KEY_ALIAS
-          keyPassword MYAPP_UPLOAD_KEY_PASSWORD
-      }
-  }
-}
-```
-
-```
-buildTypes {
-  ...
-  release {
-    signingConfig signingConfigs.release
-    ...
-  }
-}
-```
-
-Create folder android/app/src/main/assets
-
-Run command
-
-```
-npx react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res/
-```
-
-## Generate APK
-
-Run command to generate APK
-
-```
-rm -rf android/app/src/main/res/drawable-*
-
-npx react-native bundle --platform android --dev false \
-  --entry-file index.js \
-  --bundle-output android/app/src/main/assets/index.android.bundle \
-  --assets-dest android/app/build/intermediates/res/merged/release/
-
-cd android && ./gradlew assembleRelease
-```
-
-Find APK file
-
-```
-~/my-app/android/app/build/outputs/apk/release
-```
-
-## Generate AAB
-
-Run command to generate AAB
-
-```
-cd android
-./gradlew bundleRelease
-```
-
-Find AAB file
-
-```
-~/my-app/android/app/build/outputs/bundle/release/app-release.aab
-```
-
-## Reload .env variables
-
-```
-npx react-native start --reset-cache
-```
-
-## Show Async Storage Values
-
-Using the RN Debugger it is possible to see what is stored in Async Storage
-
-```
-showAsyncStorageContentInDev()
 ```
